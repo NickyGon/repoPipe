@@ -4,24 +4,45 @@ Transform:
 
 Description: My Lambda Resources
 Resources:
-  LambdaRole:
-    Type: AWS::IAM::Role
+  GetMovie:
+    Type: AWS::Serverless::Function
     Properties:
-      RoleName: lambda-role-3213
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action:
-            - sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-              - lambda.amazonaws.com
-        Version: 2012-10-17
+      FunctionName: getMovie
+      Environment: 
+        Variables:
+         USERS_TABLE: !Ref MoviesTable
+      Handler: movies.getMovie
+      Runtime: python3.6
+      CodeUri: package/
       Policies:
-        - PolicyName: root
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action: 's3:PutObject'
-                Resource: '*'
+        - DynamoDBReadPolicy:
+            TableName: !Ref MoviesTable
+      Events:
+        GetMovie:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyAPI
+            Path: "/movie/{movieId}"
+            Method: GET
+          
+
+  PutMovie:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: putMovie
+      Environment: 
+        Variables:
+         USERS_TABLE: !Ref MoviesTable
+      Handler: movies.putMovie
+      Runtime: python3.6
+      CodeUri: package/
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref MoviesTable
+      Events:
+        GetUsers:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyAPI
+            Path: "/movie/{movie_id}"
+            Method: PUT

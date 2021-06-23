@@ -6,10 +6,10 @@ phases:
     runtime-versions:
       python: 3.7
     commands:
-      - echo "no"
+      - /deployment.sh -b
   pre_build:
     commands:
-      - echo si
+      - ./deployment.sh -p
   build:
     commands:
       - echo nel
@@ -18,5 +18,5 @@ phases:
       - echo "soy un payaso"
 artifacts:
   files:
-    - template.yaml
+    - packaged-template.json
   name: upbCodepipeline
