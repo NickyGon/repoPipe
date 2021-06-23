@@ -24,7 +24,6 @@ Resources:
             RestApiId: !Ref MyAPI
             Path: "/movie/{movieId}"
             Method: GET
-          
 
   PutMovie:
     Type: AWS::Serverless::Function
@@ -46,3 +45,34 @@ Resources:
             RestApiId: !Ref MyAPI
             Path: "/movie/{movie_id}"
             Method: PUT
+            
+  MyAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: movies-ale
+      StageName: prod
+      DefinitionBody:
+          Fn::Transform:
+            Name: AWS::Include
+            Parameters:
+              Location: swagger.yaml    
+  
+  
+  
+  MoviesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: movie-appi
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      KeySchema:
+        - AttributeName: "pk"
+          KeyType: "HASH"
+        - AttributeName: "sk"
+          KeyType: "RANGE"
+      AttributeDefinitions:
+        - AttributeName: "pk"
+          AttributeType: "S"
+        - AttributeName: "sk"
+          AttributeType: "S"
