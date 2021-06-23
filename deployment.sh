@@ -1,7 +1,7 @@
 
 #!/bin/bash
 DEPLOYMENT_BUCKET="origin-1234"
-STACK_NAME="codepipeline-stack-312"
+STACK_NAME="codepipeline-stack-012"
 
 while getopts ":bdp" OPTION; do
     case $OPTION in
