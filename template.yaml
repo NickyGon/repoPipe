@@ -4,14 +4,14 @@ Transform:
 
 Description: My Lambda Resources
 Resources:
-  GetUsers:
+  GetUserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: getUsers
-      Environment: 
+      FunctionName: getUser
+      Environment:
         Variables:
-         USERS_TABLE: !Ref MyUsersTable
-      Handler: users.getUsers
+          USERS_TABLE: !Ref MyUsersTable
+      Handler: users.getUser
       Runtime: python3.6
       CodeUri: package/
       Policies:
@@ -22,18 +22,17 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyAPI
-            Path: "/users/{userId}"
+            Path: "/user/{userId}"
             Method: GET
-          
 
-  PutUsers:
+  PutUserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: putUsers
-      Environment: 
+      FunctionName: putUser
+      Environment:
         Variables:
-         USERS_TABLE: !Ref MyUsersTable
-      Handler: users.putUsers
+          USERS_TABLE: !Ref MyUsersTable
+      Handler: users.putUser
       Runtime: python3.6
       CodeUri: package/
       Policies:
@@ -44,52 +43,34 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyAPI
-            Path: "/users/{userId}"
+            Path: "/user/{userId}"
             Method: PUT
-      
-      
-  # MyTable:
-  #   Type: AWS::Serverless::SimpleTable
-  #   Properties:
-  #     TableName: my-user-app
-  #     PrimaryKey:
-  #       Name: pk
-  #       Type: String
-  #     ProvisionedThroughput:
-  #       ReadCapacityUnits: 5
-  #       WriteCapacityUnits: 5
-        
-
-  
-  
 
   MyAPI:
     Type: AWS::Serverless::Api
     Properties:
-      Name: my-api-gateway3
+      Name: my-api-gateway
       StageName: prod
       DefinitionBody:
-          Fn::Transform:
-            Name: AWS::Include
-            Parameters:
-              Location: swagger.yaml      
-  
-  
-  
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: swagger.yaml
+
   MyUsersTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: my-users-app2
+      TableName: my-users-app-4
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
       KeySchema:
-        - AttributeName: "pk"
-          KeyType: "HASH"
-        - AttributeName: "sk"
-          KeyType: "RANGE"
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
       AttributeDefinitions:
-        - AttributeName: "pk"
-          AttributeType: "S"
-        - AttributeName: "sk"
-          AttributeType: "S"
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S

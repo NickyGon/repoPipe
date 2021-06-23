@@ -2,16 +2,16 @@ import json
 import boto3
 import os
 
-users_table =os.environ['USERS_TABLE']
+users_table = os.environ['USERS_TABLE']
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(users_table)
 
 
-def getUsers(event, context):
-    print(json.dumps({"running":True}))
+def getUser(event, context):
+    print(json.dumps({"running": True}))
     print(json.dumps(event))
-    path=event["path"]
-    user_id=path.split("/")[1]
+    path = event["path"]
+    user_id = path.split("/")[-1] # ["user", "id"]
     response = table.get_item(
         Key={
             'pk': user_id,
@@ -23,26 +23,27 @@ def getUsers(event, context):
         'statusCode': 200,
         'body': json.dumps(item)
     }
-    
-def putUsers(event, context):
-    print(json.dumps({"running":True}))
+
+def putUser(event, context):
+    print(json.dumps({"running": True}))
     print(json.dumps(event))
-    path=event["path"]
-    user_id=path.split("/")[-1]
+    path = event["path"]
+    user_id = path.split("/")[-1] # ["user", "id"]
     
-    body=json.loads(event["body"])
+    body = json.loads(event["body"])
     print(body)
     print(user_id)
-    
+    item = {
+        'pk': user_id,
+        'sk': 'age',
+        'name': body["name"],
+        'last_name': body["last_name"],
+        'age': body["age"]
+    }
+    print(json.dumps(item))
     table.put_item(
-        Item={
-            'pk': user_id,
-            'sk':'age',
-            'name': body["name"],
-            'last_name': body["last_name"],
-            'age': body["age"]
-        }
-    )   
+       Item=item
+    )
     
     return {
         'statusCode': 200,
