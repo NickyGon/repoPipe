@@ -4,65 +4,82 @@ Transform:
 
 Description: My Lambda Resources
 Resources:
-  GetMovie:
+  GetUsers:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: getMovie
+      FunctionName: getUsers
       Environment: 
         Variables:
-         USERS_TABLE: !Ref MoviesTable
-      Handler: movies.getMovie
+         USERS_TABLE: !Ref MyUsersTable
+      Handler: users.getUsers
       Runtime: python3.6
       CodeUri: package/
       Policies:
         - DynamoDBReadPolicy:
-            TableName: !Ref MoviesTable
-      Events:
-        GetMovie:
-          Type: Api
-          Properties:
-            RestApiId: !Ref MyAPI
-            Path: "/movie/{movieId}"
-            Method: GET
-
-  PutMovie:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: putMovie
-      Environment: 
-        Variables:
-         USERS_TABLE: !Ref MoviesTable
-      Handler: movies.putMovie
-      Runtime: python3.6
-      CodeUri: package/
-      Policies:
-        - DynamoDBWritePolicy:
-            TableName: !Ref MoviesTable
+            TableName: !Ref MyUsersTable
       Events:
         GetUsers:
           Type: Api
           Properties:
             RestApiId: !Ref MyAPI
-            Path: "/movie/{movie_id}"
+            Path: "/users/{userId}"
+            Method: GET
+          
+
+  PutUsers:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: putUsers
+      Environment: 
+        Variables:
+         USERS_TABLE: !Ref MyUsersTable
+      Handler: users.putUsers
+      Runtime: python3.6
+      CodeUri: package/
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref MyUsersTable
+      Events:
+        GetUsers:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyAPI
+            Path: "/users/{userId}"
             Method: PUT
-            
+      
+      
+  # MyTable:
+  #   Type: AWS::Serverless::SimpleTable
+  #   Properties:
+  #     TableName: my-user-app
+  #     PrimaryKey:
+  #       Name: pk
+  #       Type: String
+  #     ProvisionedThroughput:
+  #       ReadCapacityUnits: 5
+  #       WriteCapacityUnits: 5
+        
+
+  
+  
+
   MyAPI:
     Type: AWS::Serverless::Api
     Properties:
-      Name: movies-ale
+      Name: my-api-gateway3
       StageName: prod
       DefinitionBody:
           Fn::Transform:
             Name: AWS::Include
             Parameters:
-              Location: swagger.yaml    
+              Location: swagger.yaml      
   
   
   
-  MoviesTable:
+  MyUsersTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: movie-appi
+      TableName: my-users-app2
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
