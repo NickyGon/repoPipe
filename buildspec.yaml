@@ -16,3 +16,7 @@ phases:
   post_build:
     commands:
       - echo "soy un payaso"
+artifacts:
+  files:
+    - template.yaml
+  name: upbCodepipeline
