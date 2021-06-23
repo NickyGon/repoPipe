@@ -6,7 +6,7 @@ phases:
     runtime-versions:
       python: 3.7
     commands:
-      - /deployment.sh -b
+      - ./deployment.sh -b
   pre_build:
     commands:
       - ./deployment.sh -p
@@ -15,7 +15,7 @@ phases:
       - echo nel
   post_build:
     commands:
-      - echo "soy un payaso"
+      - echo "soy un pollo"
 artifacts:
   files:
     - packaged-template.json
