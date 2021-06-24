@@ -15,7 +15,7 @@ phases:
       - echo nel
   post_build:
     commands:
-      - echo "soy un polpa"
+      - echo "soy un polpo"
 artifacts:
   files:
     - packaged-template.json
