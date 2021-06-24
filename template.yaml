@@ -78,7 +78,7 @@ Resources:
   TableNameParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: "/movies-app/table/name"
+      Name: "/movies-app/table/name2"
       Type: String
       Value: !Ref MyUsersTable
       
