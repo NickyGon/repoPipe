@@ -7,7 +7,7 @@ dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(users_table)
 
 
-def getUser(event, context):
+def getUser2(event, context):
     print(json.dumps({"running": True}))
     print(json.dumps(event))
     path = event["path"]
@@ -24,7 +24,7 @@ def getUser(event, context):
         'body': json.dumps(item)
     }
 
-def putUser(event, context):
+def putUser2(event, context):
     print(json.dumps({"running": True}))
     print(json.dumps(event))
     path = event["path"]
