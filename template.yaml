@@ -75,14 +75,14 @@ Resources:
         - AttributeName: sk
           AttributeType: S
           
-  BasicParameter:
+  TableNameParameter:
     Type: AWS::SSM::Parameter
     Properties:
       Name: "/movies-app/table/name"
       Type: String
       Value: !Ref MyUsersTable
       
-  BasicParameter:
+  TableArnParameter:
     Type: AWS::SSM::Parameter
     Properties:
       Name: "/movies-app/table/arn"
